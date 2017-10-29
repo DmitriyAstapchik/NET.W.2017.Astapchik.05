@@ -179,7 +179,7 @@ namespace Homework
                 return false;
             }
 
-            if (this == obj)
+            if (ReferenceEquals(this, obj))
             {
                 return true;
             }
