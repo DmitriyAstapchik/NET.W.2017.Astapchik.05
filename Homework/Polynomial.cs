@@ -179,6 +179,11 @@ namespace Homework
                 return false;
             }
 
+            if (this == obj)
+            {
+                return true;
+            }
+
             var polynomial = (Polynomial)obj;
 
             if (degree != polynomial.degree)
