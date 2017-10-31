@@ -76,6 +76,28 @@ namespace Homework
         }
 
         /// <summary>
+        /// Sorts jagged int array using bubble sort and comparer of int arrays
+        /// </summary>
+        /// <param name="array">jagged array to sort</param>
+        /// <param name="comparer">object that compares two arrays</param>
+        public static void Sort(int[][] array, System.Collections.Generic.IComparer<int[]> comparer)
+        {
+            bool swapped = true;
+            for (int i = 0; i < array.Length - 1 && swapped == true; i++)
+            {
+                swapped = false;
+                for (int j = 0; j < array.Length - 1 - i; j++)
+                {
+                    if (comparer.Compare(array[j], array[j + 1]) > 0)
+                    {
+                        SwapArrays(ref array[j], ref array[j + 1]);
+                        swapped = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Swaps two arrays by ref
         /// </summary>
         /// <param name="array1">first array</param>

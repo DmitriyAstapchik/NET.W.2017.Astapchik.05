@@ -68,14 +68,25 @@ namespace Homework
         }
 
         /// <summary>
-        /// Gets the coefficient of the term with degree <paramref name="power"/> or null if <paramref name="power"/> is greater than polynomial degree
+        /// Gets the coefficient of the term with degree <paramref name="power"/>
         /// </summary>
-        /// <param name="power">power of a term which coefficient is needed</param>
-        /// <returns>coefficient of a term or null</returns>
-        public decimal? this[byte power]
+        /// <param name="power">power of a term whose coefficient is needed</param>
+        /// <returns>coefficient of a term</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="power"/> exceeds degree</exception>
+        public decimal this[byte power]
         {
-            get { return power <= degree ? (decimal?)coefficients[degree - power] : null; }
+            get
+            {
+                if (power > degree)
+                {
+                    throw new ArgumentOutOfRangeException("Power cannot be greater than polynomial degree");
+                }
+
+                return coefficients[degree - power];
+            }
         }
+
+        #region overloaded operators
 
         /// <summary>
         /// Polynomial addition
@@ -90,7 +101,7 @@ namespace Homework
 
             for (int i = 0; i < resultCoeffs.Length; i++)
             {
-                resultCoeffs[i] = (obj1[(byte)(resultDegree - i)] ?? 0) + (obj2[(byte)(resultDegree - i)] ?? 0);
+                resultCoeffs[i] = (obj1.degree >= resultDegree - i ? obj1[(byte)(resultDegree - i)] : 0) + (obj2.degree >= resultDegree - i ? obj2[(byte)(resultDegree - i)] : 0);
             }
 
             return new Polynomial(resultCoeffs);
@@ -167,6 +178,10 @@ namespace Homework
             return !(obj1 == obj2);
         }
 
+        #endregion
+
+        #region overriden from object
+
         /// <summary>
         /// Checks if a polynomial is equal to polynomial <paramref name="obj"/>
         /// </summary>
@@ -174,7 +189,7 @@ namespace Homework
         /// <returns>true for equality or false</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Polynomial))
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
@@ -274,5 +289,7 @@ namespace Homework
 
             return str;
         }
+
+        #endregion
     }
 }
