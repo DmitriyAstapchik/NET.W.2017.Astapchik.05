@@ -67,7 +67,7 @@ namespace Homework.Tests
         }
 
         [Test, TestCaseSource(typeof(PolynomialTestData), "IndexerTestCases")]
-        public decimal? IndexerTest(Polynomial obj, byte power)
+        public decimal IndexerTest(Polynomial obj, byte power)
         {
             return obj[power];
         }
@@ -84,7 +84,7 @@ namespace Homework.Tests
                 yield return new TestCaseData(new Polynomial(1, 2, 7, 0), new Polynomial(1, 2, 7, 0)).Returns(true);
                 yield return new TestCaseData(new Polynomial(2, 3), 23).Returns(false);
                 yield return new TestCaseData(new Polynomial(1, 2, 3, 4), new Polynomial(1, 2, 3, 4, 4)).Returns(false);
-                yield return new TestCaseData(new Polynomial(1, 2, 3, 4, 4), new Polynomial(1, 2, 3, 4, 5)).Returns(false);
+                yield return new TestCaseData(new Polynomial(1, 2, 3, 4, 4), new Polynomial(1, 2, 3, 4)).Returns(false);
                 yield return new TestCaseData(new Polynomial(1), new Polynomial(-1)).Returns(false);
                 yield return new TestCaseData(new Polynomial(6, 5), new Polynomial(5, 6)).Returns(false);
             }
@@ -192,7 +192,7 @@ namespace Homework.Tests
             get
             {
                 yield return new TestCaseData(new Polynomial(1, 2, 3, 0), (byte)0).Returns(0);
-                yield return new TestCaseData(new Polynomial(2, 5, 1, 99), (byte)4).Returns(null);
+                yield return new TestCaseData(new Polynomial(2, 5, 1, 99), (byte)3).Returns(2);
                 yield return new TestCaseData(new Polynomial(4, -10, 4, 99, 824, 22), (byte)4).Returns(-10);
                 yield return new TestCaseData(new Polynomial(1, 0, 0, 0, 0, 0, 1, 0, 0), (byte)2).Returns(1);
             }
