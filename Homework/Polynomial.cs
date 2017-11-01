@@ -61,7 +61,8 @@ namespace Homework
             }
             else
             {
-                coefficients = coeffs;
+                coefficients = new decimal[coeffs.Length];
+                coeffs.CopyTo(coefficients, 0);
             }
 
             degree = (byte)(coefficients.Length - 1);
