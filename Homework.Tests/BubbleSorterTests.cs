@@ -14,8 +14,10 @@ namespace Homework.Tests
                   new int[] { 22, 999, 10, -2, -92, 0, 0, 29 },
                   new int[] { 19, 04, -2, 021, -12 },
                   new int[] { 1, 50, 41 },
+                  new int[] { },
                   new int[] { -11, -22, 10, 200, 2 },
                   new int[] { 123, 123, 490, -24, -29, 0, 12 },
+                  null,
                   new int[] { 0, 0, 25, 10 }
                 };
 
@@ -26,7 +28,7 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderBy(row => row.Sum()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerBySumAscending());
-            Assert.True(testArray.OrderBy(row => row.Sum()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
         }
 
         [Test]
@@ -36,7 +38,7 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderBy(row => row.Max()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMaxAscending());
-            Assert.True(testArray.OrderBy(row => row.Max()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
         }
 
         [Test]
@@ -46,7 +48,7 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderBy(row => row.Min()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMinAscending());
-            Assert.True(testArray.OrderBy(row => row.Min()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
         }
 
         [Test]
@@ -56,7 +58,7 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderByDescending(row => row.Sum()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerBySumDescending());
-            Assert.True(testArray.OrderByDescending(row => row.Sum()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
         }
 
         [Test]
@@ -66,7 +68,7 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderByDescending(row => row.Max()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMaxDescending());
-            Assert.True(testArray.OrderByDescending(row => row.Max()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
         }
 
         [Test]
@@ -76,14 +78,46 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderByDescending(row => row.Min()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMinDescending());
-            Assert.True(testArray.OrderByDescending(row => row.Min()).SequenceEqual(testArray));
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+        }
+
+        /// <summary>
+        /// Helps on comparing two arrays that can be null or empty
+        /// </summary>
+        static class ComparerHelper
+        {
+            /// <summary>
+            /// Compares two null, empty or filled arrays. Null arrays are lesser than empty arrays, filled arrays go for further comparison
+            /// </summary>
+            /// <param name="left">left array</param>
+            /// <param name="right">right array</param>
+            /// <returns>null if both arrays are not null or empty, -1 if left is lesser, 0 on equality, 1 if right is lesser</returns>
+            public static int? CompareEmptyOrNull(int[] left, int[] right)
+            {
+                if ((left == null || left.Length == 0) && right != null)
+                {
+                    return -1;
+                }
+
+                if ((right == null || right.Length == 0) && left != null)
+                {
+                    return 1;
+                }
+
+                if (left == null && right == null || left.Length == 0 && right.Length == 0)
+                {
+                    return 0;
+                }
+
+                return null;
+            }
         }
 
         class ComparerBySumAscending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
-                return left.Sum().CompareTo(right.Sum());
+                return ComparerHelper.CompareEmptyOrNull(left, right) ?? left.Sum().CompareTo(right.Sum());
             }
         }
 
@@ -91,7 +125,7 @@ namespace Homework.Tests
         {
             public int Compare(int[] left, int[] right)
             {
-                return left.Max().CompareTo(right.Max());
+                return ComparerHelper.CompareEmptyOrNull(left, right) ?? left.Max().CompareTo(right.Max());
             }
         }
 
@@ -99,7 +133,7 @@ namespace Homework.Tests
         {
             public int Compare(int[] left, int[] right)
             {
-                return left.Min().CompareTo(right.Min());
+                return ComparerHelper.CompareEmptyOrNull(left, right) ?? left.Min().CompareTo(right.Min());
             }
         }
 
@@ -107,7 +141,7 @@ namespace Homework.Tests
         {
             public int Compare(int[] left, int[] right)
             {
-                return right.Sum().CompareTo(left.Sum());
+                return ComparerHelper.CompareEmptyOrNull(right, left) ?? right.Sum().CompareTo(left.Sum());
             }
         }
 
@@ -115,7 +149,7 @@ namespace Homework.Tests
         {
             public int Compare(int[] left, int[] right)
             {
-                return right.Max().CompareTo(left.Max());
+                return ComparerHelper.CompareEmptyOrNull(right, left) ?? right.Max().CompareTo(left.Max());
             }
         }
 
@@ -123,7 +157,7 @@ namespace Homework.Tests
         {
             public int Compare(int[] left, int[] right)
             {
-                return right.Min().CompareTo(left.Min());
+                return ComparerHelper.CompareEmptyOrNull(right, left) ?? right.Min().CompareTo(left.Min());
             }
         }
     }
