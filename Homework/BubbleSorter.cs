@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Homework
 {
@@ -9,6 +10,14 @@ namespace Homework
     public static class BubbleSorter
     {
         /// <summary>
+        /// compares two int arrays
+        /// </summary>
+        /// <param name="array1">first array</param>
+        /// <param name="array2">second array</param>
+        /// <returns>value, indicating two arrays order</returns>
+        public delegate int CompareArrays(int[] array1, int[] array2);
+
+        /// <summary>
         /// Possible kinds of sort
         /// </summary>
         public enum SortBy { Sum, Max, Min };
@@ -17,6 +26,38 @@ namespace Homework
         /// Ascending or descending sort order
         /// </summary>
         public enum SortOrder { Ascending, Descending };
+
+        /// <summary>
+        /// Sorts jagged int array using bubble sort and comparer of int arrays
+        /// </summary>
+        /// <param name="array">jagged array to sort</param>
+        /// <param name="comparer">object that compares two arrays</param>
+        public static void Sort(int[][] array, IComparer<int[]> comparer)
+        {
+            bool swapped = true;
+            for (int i = 0; i < array.Length - 1 && swapped == true; i++)
+            {
+                swapped = false;
+                for (int j = 0; j < array.Length - 1 - i; j++)
+                {
+                    if (comparer.Compare(array[j], array[j + 1]) > 0)
+                    {
+                        SwapArrays(ref array[j], ref array[j + 1]);
+                        swapped = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// sorts a jagged array of int arrays using compare function
+        /// </summary>
+        /// <param name="array">jagged array to sort</param>
+        /// <param name="compare">compare function</param>
+        public static void Sort(int[][] array, CompareArrays compare)
+        {
+            Sort(array, new ArrayComparer(compare));
+        }
 
         /// <summary>
         /// Sorts jagged array by ascending/descending its nested arrays elements sum, max value or minvalue
@@ -76,11 +117,60 @@ namespace Homework
         }
 
         /// <summary>
-        /// Sorts jagged int array using bubble sort and comparer of int arrays
+        /// Swaps two arrays by ref
+        /// </summary>
+        /// <param name="array1">first array</param>
+        /// <param name="array2">second array</param>
+        internal static void SwapArrays(ref int[] array1, ref int[] array2)
+        {
+            var temp = array1;
+            array1 = array2;
+            array2 = temp;
+        }
+
+        /// <summary>
+        /// represents an array compare object
+        /// </summary>
+        private class ArrayComparer : IComparer<int[]>
+        {
+            /// <summary>
+            /// compare function
+            /// </summary>
+            private CompareArrays compare;
+
+            /// <summary>
+            /// constructs an instance with specified compare function
+            /// </summary>
+            /// <param name="compare">compare function</param>
+            public ArrayComparer(CompareArrays compare)
+            {
+                this.compare = compare;
+            }
+
+            /// <summary>
+            /// compares two arrays of integers
+            /// </summary>
+            /// <param name="arr1">first array</param>
+            /// <param name="arr2">second array</param>
+            /// <returns>value, indicating two arrays order</returns>
+            public int Compare(int[] arr1, int[] arr2)
+            {
+                return compare(arr1, arr2);
+            }
+        }
+    }
+
+    /// <summary>
+    /// second version of array bubble sorter
+    /// </summary>
+    public static class BubbleSorter2
+    {
+        /// <summary>
+        /// sorts a jagged array of arrays of integers using compare function
         /// </summary>
         /// <param name="array">jagged array to sort</param>
-        /// <param name="comparer">object that compares two arrays</param>
-        public static void Sort(int[][] array, System.Collections.Generic.IComparer<int[]> comparer)
+        /// <param name="compare">compare function</param>
+        public static void Sort(int[][] array, BubbleSorter.CompareArrays compare)
         {
             bool swapped = true;
             for (int i = 0; i < array.Length - 1 && swapped == true; i++)
@@ -88,9 +178,9 @@ namespace Homework
                 swapped = false;
                 for (int j = 0; j < array.Length - 1 - i; j++)
                 {
-                    if (comparer.Compare(array[j], array[j + 1]) > 0)
+                    if (compare(array[j], array[j + 1]) > 0)
                     {
-                        SwapArrays(ref array[j], ref array[j + 1]);
+                        BubbleSorter.SwapArrays(ref array[j], ref array[j + 1]);
                         swapped = true;
                     }
                 }
@@ -98,15 +188,13 @@ namespace Homework
         }
 
         /// <summary>
-        /// Swaps two arrays by ref
+        /// sorts a jagged array of arrays of integers using arrays comparer
         /// </summary>
-        /// <param name="array1">first array</param>
-        /// <param name="array2">second array</param>
-        private static void SwapArrays(ref int[] array1, ref int[] array2)
+        /// <param name="array">array to sort</param>
+        /// <param name="comparer">arrays compare object</param>
+        public static void Sort(int[][] array, IComparer<int[]> comparer)
         {
-            var temp = array1;
-            array1 = array2;
-            array2 = temp;
+            Sort(array, comparer.Compare);
         }
     }
 }
