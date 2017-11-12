@@ -9,14 +9,14 @@ namespace Homework
     public class Polynomial
     {
         /// <summary>
+        /// Degree of a polynomial (the highest degree of its monomials)
+        /// </summary>
+        public readonly byte Degree;
+
+        /// <summary>
         /// String which represents polynomial variable when displaying
         /// </summary>
         private const string VARIABLE = "x";
-
-        /// <summary>
-        /// Degree of a polynomial (the highest degree of its monomials)
-        /// </summary>
-        public readonly byte degree;
 
         /// <summary>
         /// Polynomial coefficients. First belongs to highest-degree monomial, last - to zero-degree one
@@ -33,7 +33,6 @@ namespace Homework
         /// <exception cref="ArgumentException">The number of coefficients exceeds maximum value</exception>
         public Polynomial(params decimal[] coeffs)
         {
-            #region argument validation
             if (coeffs == null)
             {
                 throw new ArgumentNullException("coeffs");
@@ -53,7 +52,6 @@ namespace Homework
             {
                 throw new ArgumentException("Maximum number of coefficients is 256");
             }
-            #endregion
 
             if (coeffs.All(c => c == 0))
             {
@@ -65,7 +63,7 @@ namespace Homework
                 coeffs.CopyTo(coefficients, 0);
             }
 
-            degree = (byte)(coefficients.Length - 1);
+            Degree = (byte)(coefficients.Length - 1);
         }
 
         /// <summary>
@@ -78,12 +76,12 @@ namespace Homework
         {
             get
             {
-                if (power > degree)
+                if (power > Degree)
                 {
                     throw new ArgumentOutOfRangeException("Power cannot be greater than polynomial degree");
                 }
 
-                return coefficients[degree - power];
+                return coefficients[Degree - power];
             }
         }
 
@@ -97,12 +95,12 @@ namespace Homework
         /// <returns>sum</returns>
         public static Polynomial operator +(Polynomial obj1, Polynomial obj2)
         {
-            var resultDegree = obj1.degree >= obj2.degree ? obj1.degree : obj2.degree;
+            var resultDegree = obj1.Degree >= obj2.Degree ? obj1.Degree : obj2.Degree;
             var resultCoeffs = new decimal[resultDegree + 1];
 
             for (int i = 0; i < resultCoeffs.Length; i++)
             {
-                resultCoeffs[i] = (obj1.degree >= resultDegree - i ? obj1[(byte)(resultDegree - i)] : 0) + (obj2.degree >= resultDegree - i ? obj2[(byte)(resultDegree - i)] : 0);
+                resultCoeffs[i] = (obj1.Degree >= resultDegree - i ? obj1[(byte)(resultDegree - i)] : 0) + (obj2.Degree >= resultDegree - i ? obj2[(byte)(resultDegree - i)] : 0);
             }
 
             return new Polynomial(resultCoeffs);
@@ -144,7 +142,7 @@ namespace Homework
         /// <returns>product</returns>
         public static Polynomial operator *(Polynomial obj1, Polynomial obj2)
         {
-            var resultCoeffs = new decimal[(obj1.degree + obj2.degree) + 1];
+            var resultCoeffs = new decimal[(obj1.Degree + obj2.Degree) + 1];
 
             for (int i = 0; i < obj1.coefficients.Length; i++)
             {
@@ -202,7 +200,7 @@ namespace Homework
 
             var polynomial = (Polynomial)obj;
 
-            if (degree != polynomial.degree)
+            if (Degree != polynomial.Degree)
             {
                 return false;
             }
@@ -219,15 +217,15 @@ namespace Homework
         }
 
         /// <summary>
-        /// Generates hashcode based on polynomial coefficients
+        /// Generates hash code based on polynomial coefficients
         /// </summary>
-        /// <returns>hashcode</returns>
+        /// <returns>hash code</returns>
         public override int GetHashCode()
         {
             int hash = 7;
             foreach (var coeff in coefficients)
             {
-                hash = hash * 13 + coeff.GetHashCode();
+                hash = (hash * 13) + coeff.GetHashCode();
             }
 
             return hash;
@@ -243,23 +241,22 @@ namespace Homework
 
             if (coefficients[0] != 0)
             {
-                if (degree == 1)
+                if (Degree == 1)
                 {
-                    str += (coefficients[0] == 1 ? "" : coefficients[0] == -1 ? "-" : coefficients[0].ToString()) + VARIABLE;
+                    str += (coefficients[0] == 1 ? string.Empty : coefficients[0] == -1 ? "-" : coefficients[0].ToString()) + VARIABLE;
                 }
-                else if (degree == 0)
+                else if (Degree == 0)
                 {
                     str += coefficients[0];
                 }
                 else
                 {
-                    str += (coefficients[0] == 1 ? "" : coefficients[0] == -1 ? "-" : coefficients[0].ToString()) + VARIABLE + '^' + degree;
+                    str += (coefficients[0] == 1 ? string.Empty : coefficients[0] == -1 ? "-" : coefficients[0].ToString()) + VARIABLE + '^' + Degree;
                 }
             }
 
             for (int i = 1; i < coefficients.Length; i++)
             {
-
                 if (coefficients[i] > 0)
                 {
                     str += " + ";
@@ -273,18 +270,18 @@ namespace Homework
                     continue;
                 }
 
-                string coeff = Math.Abs(coefficients[i]) == 1 && degree - i > 0 ? "" : Math.Abs(coefficients[i]).ToString();
-                if (degree - i == 1)
+                string coeff = Math.Abs(coefficients[i]) == 1 && Degree - i > 0 ? string.Empty : Math.Abs(coefficients[i]).ToString();
+                if (Degree - i == 1)
                 {
                     str += coeff + VARIABLE;
                 }
-                else if (degree - i == 0)
+                else if (Degree - i == 0)
                 {
                     str += coeff;
                 }
                 else
                 {
-                    str += coeff + VARIABLE + '^' + (degree - i);
+                    str += coeff + VARIABLE + '^' + (Degree - i);
                 }
             }
 

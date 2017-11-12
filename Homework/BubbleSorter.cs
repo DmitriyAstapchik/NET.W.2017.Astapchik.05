@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Homework
 {
@@ -10,7 +10,7 @@ namespace Homework
     public static class BubbleSorter
     {
         /// <summary>
-        /// compares two int arrays
+        /// compares two arrays of integers
         /// </summary>
         /// <param name="array1">first array</param>
         /// <param name="array2">second array</param>
@@ -20,15 +20,24 @@ namespace Homework
         /// <summary>
         /// Possible kinds of sort
         /// </summary>
-        public enum SortBy { Sum, Max, Min };
+        public enum SortBy
+        {
+            Sum,
+            Max,
+            Min
+        }
 
         /// <summary>
         /// Ascending or descending sort order
         /// </summary>
-        public enum SortOrder { Ascending, Descending };
+        public enum SortOrder
+        {
+            Ascending,
+            Descending
+        }
 
         /// <summary>
-        /// Sorts jagged int array using bubble sort and comparer of int arrays
+        /// Sorts jagged integer array using bubble sort and comparer of integer arrays
         /// </summary>
         /// <param name="array">jagged array to sort</param>
         /// <param name="comparer">object that compares two arrays</param>
@@ -50,7 +59,7 @@ namespace Homework
         }
 
         /// <summary>
-        /// sorts a jagged array of int arrays using compare function
+        /// sorts a jagged array of integer arrays using compare function
         /// </summary>
         /// <param name="array">jagged array to sort</param>
         /// <param name="compare">compare function</param>
@@ -60,14 +69,13 @@ namespace Homework
         }
 
         /// <summary>
-        /// Sorts jagged array by ascending/descending its nested arrays elements sum, max value or minvalue
+        /// Sorts jagged array by ascending/descending its nested arrays elements sum, max value or min value
         /// </summary>
         /// <param name="array">array to sort</param>
         /// <param name="by">kind of sort</param>
         /// <param name="order">order of sort</param>
         public static void Sort(int[][] array, SortBy by, SortOrder order)
         {
-            #region compare func initialization
             Func<int[], int[], bool> compare;
             if (order == SortOrder.Ascending)
             {
@@ -99,7 +107,6 @@ namespace Homework
                     compare = (arr1, arr2) => arr1.Min() < arr2.Min();
                 }
             }
-            #endregion
 
             bool swapped = true;
             for (int i = 0; i < array.Length - 1 && swapped == true; i++)
@@ -157,44 +164,6 @@ namespace Homework
             {
                 return compare(arr1, arr2);
             }
-        }
-    }
-
-    /// <summary>
-    /// second version of array bubble sorter
-    /// </summary>
-    public static class BubbleSorter2
-    {
-        /// <summary>
-        /// sorts a jagged array of arrays of integers using compare function
-        /// </summary>
-        /// <param name="array">jagged array to sort</param>
-        /// <param name="compare">compare function</param>
-        public static void Sort(int[][] array, BubbleSorter.CompareArrays compare)
-        {
-            bool swapped = true;
-            for (int i = 0; i < array.Length - 1 && swapped == true; i++)
-            {
-                swapped = false;
-                for (int j = 0; j < array.Length - 1 - i; j++)
-                {
-                    if (compare(array[j], array[j + 1]) > 0)
-                    {
-                        BubbleSorter.SwapArrays(ref array[j], ref array[j + 1]);
-                        swapped = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// sorts a jagged array of arrays of integers using arrays comparer
-        /// </summary>
-        /// <param name="array">array to sort</param>
-        /// <param name="comparer">arrays compare object</param>
-        public static void Sort(int[][] array, IComparer<int[]> comparer)
-        {
-            Sort(array, comparer.Compare);
         }
     }
 }
