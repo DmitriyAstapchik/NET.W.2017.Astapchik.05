@@ -8,7 +8,7 @@ namespace Homework.Tests
     [TestFixture]
     public class BubbleSorterTests
     {
-        int[][] testArray =
+        static int[][] testArray =
                 {
                   new int[] { 1, 2, 0, 10, 22, -92 },
                   new int[] { 22, 999, 10, -2, -92, 0, 0, 29 },
@@ -21,6 +21,13 @@ namespace Homework.Tests
                   new int[] { 0, 0, 25, 10 }
                 };
 
+        CompareArrays compareBySumAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
+        CompareArrays compareBySumDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
+        CompareArrays compareByMaxAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
+        CompareArrays compareByMaxDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
+        CompareArrays compareByMinAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
+        CompareArrays compareByMinDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
+
         [Test]
         public void SortBySumAscendingTest()
         {
@@ -28,6 +35,15 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderBy(row => row.Sum()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerBySumAscending());
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
+
+            Sort(testArray, compareBySumAscending);
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerBySumAscending());
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareBySumAscending);
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
         }
 
@@ -39,6 +55,15 @@ namespace Homework.Tests
 
             Sort(testArray, new ComparerByMaxAscending());
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
+
+            Sort(testArray, compareByMaxAscending);
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerByMaxAscending());
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareByMaxAscending);
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
         }
 
         [Test]
@@ -48,6 +73,15 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderBy(row => row.Min()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMinAscending());
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
+
+            Sort(testArray, compareByMinAscending);
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerByMinAscending());
+            Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareByMinAscending);
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
         }
 
@@ -59,6 +93,15 @@ namespace Homework.Tests
 
             Sort(testArray, new ComparerBySumDescending());
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            Sort(testArray, compareBySumDescending);
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerBySumDescending());
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareBySumDescending);
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
         }
 
         [Test]
@@ -69,6 +112,15 @@ namespace Homework.Tests
 
             Sort(testArray, new ComparerByMaxDescending());
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            Sort(testArray, compareByMaxDescending);
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerByMaxDescending());
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareByMaxDescending);
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
         }
 
         [Test]
@@ -78,6 +130,15 @@ namespace Homework.Tests
             //Assert.True(testArray.OrderByDescending(row => row.Min()).SequenceEqual(testArray));
 
             Sort(testArray, new ComparerByMinDescending());
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            Sort(testArray, compareByMinDescending);
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, new ComparerByMinDescending());
+            Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
+
+            BubbleSorter2.Sort(testArray, compareByMinDescending);
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
         }
 
