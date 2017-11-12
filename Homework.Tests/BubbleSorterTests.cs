@@ -1,14 +1,14 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using static Homework.BubbleSorter;
-using System.Collections.Generic;
 
 namespace Homework.Tests
 {
     [TestFixture]
     public class BubbleSorterTests
     {
-        static int[][] testArray =
+        private static int[][] testArray =
                 {
                   new int[] { 1, 2, 0, 10, 22, -92 },
                   new int[] { 22, 999, 10, -2, -92, 0, 0, 29 },
@@ -21,19 +21,18 @@ namespace Homework.Tests
                   new int[] { 0, 0, 25, 10 }
                 };
 
-        CompareArrays compareBySumAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
-        CompareArrays compareBySumDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
-        CompareArrays compareByMaxAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
-        CompareArrays compareByMaxDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
-        CompareArrays compareByMinAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
-        CompareArrays compareByMinDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
+        private CompareArrays compareBySumAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
+        private CompareArrays compareBySumDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Sum().CompareTo(arr2.Sum());
+        private CompareArrays compareByMaxAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
+        private CompareArrays compareByMaxDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Max().CompareTo(arr2.Max());
+        private CompareArrays compareByMinAscending = (arr1, arr2) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
+        private CompareArrays compareByMinDescending = (arr2, arr1) => ComparerHelper.CompareEmptyOrNull(arr1, arr2) ?? arr1.Min().CompareTo(arr2.Min());
 
         [Test]
         public void SortBySumAscendingTest()
         {
-            //Sort(testArray, SortBy.Sum, SortOrder.Ascending);
-            //Assert.True(testArray.OrderBy(row => row.Sum()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Sum, SortOrder.Ascending);
+            // Assert.True(testArray.OrderBy(row => row.Sum()).SequenceEqual(testArray));
             Sort(testArray, new ComparerBySumAscending());
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Sum())).SequenceEqual(testArray));
 
@@ -50,9 +49,8 @@ namespace Homework.Tests
         [Test]
         public void SortByMaxAscendingTest()
         {
-            //Sort(testArray, SortBy.Max, SortOrder.Ascending);
-            //Assert.True(testArray.OrderBy(row => row.Max()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Max, SortOrder.Ascending);
+            // Assert.True(testArray.OrderBy(row => row.Max()).SequenceEqual(testArray));
             Sort(testArray, new ComparerByMaxAscending());
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Max())).SequenceEqual(testArray));
 
@@ -69,9 +67,8 @@ namespace Homework.Tests
         [Test]
         public void SortByMinAscendingTest()
         {
-            //Sort(testArray, SortBy.Min, SortOrder.Ascending);
-            //Assert.True(testArray.OrderBy(row => row.Min()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Min, SortOrder.Ascending);
+            // Assert.True(testArray.OrderBy(row => row.Min()).SequenceEqual(testArray));
             Sort(testArray, new ComparerByMinAscending());
             Assert.True(testArray.Where(row => row == null).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row != null && row.Length > 0).OrderBy(row => row.Min())).SequenceEqual(testArray));
 
@@ -88,9 +85,8 @@ namespace Homework.Tests
         [Test]
         public void SortBySumDescendingTest()
         {
-            //Sort(testArray, SortBy.Sum, SortOrder.Descending);
-            //Assert.True(testArray.OrderByDescending(row => row.Sum()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Sum, SortOrder.Descending);
+            // Assert.True(testArray.OrderByDescending(row => row.Sum()).SequenceEqual(testArray));
             Sort(testArray, new ComparerBySumDescending());
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Sum()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
 
@@ -107,9 +103,8 @@ namespace Homework.Tests
         [Test]
         public void SortByMaxDescendingTest()
         {
-            //Sort(testArray, SortBy.Max, SortOrder.Descending);
-            //Assert.True(testArray.OrderByDescending(row => row.Max()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Max, SortOrder.Descending);
+            // Assert.True(testArray.OrderByDescending(row => row.Max()).SequenceEqual(testArray));
             Sort(testArray, new ComparerByMaxDescending());
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Max()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
 
@@ -126,9 +121,8 @@ namespace Homework.Tests
         [Test]
         public void SortByMinDescendingTest()
         {
-            //Sort(testArray, SortBy.Min, SortOrder.Descending);
-            //Assert.True(testArray.OrderByDescending(row => row.Min()).SequenceEqual(testArray));
-
+            // Sort(testArray, SortBy.Min, SortOrder.Descending);
+            // Assert.True(testArray.OrderByDescending(row => row.Min()).SequenceEqual(testArray));
             Sort(testArray, new ComparerByMinDescending());
             Assert.True(testArray.Where(row => row != null && row.Length > 0).OrderByDescending(row => row.Min()).Concat(testArray.Where(row => row != null && row.Length == 0)).Concat(testArray.Where(row => row == null)).SequenceEqual(testArray));
 
@@ -145,7 +139,7 @@ namespace Homework.Tests
         /// <summary>
         /// Helps on comparing two arrays that can be null or empty
         /// </summary>
-        static class ComparerHelper
+        private static class ComparerHelper
         {
             /// <summary>
             /// Compares two null, empty or filled arrays. Null arrays are lesser than empty arrays, filled arrays go for further comparison
@@ -165,7 +159,7 @@ namespace Homework.Tests
                     return 1;
                 }
 
-                if (left == null && right == null || left.Length == 0 && right.Length == 0)
+                if ((left == null && right == null) || (left.Length == 0 && right.Length == 0))
                 {
                     return 0;
                 }
@@ -174,7 +168,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerBySumAscending : IComparer<int[]>
+        private class ComparerBySumAscending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
@@ -182,7 +176,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerByMaxAscending : IComparer<int[]>
+        private class ComparerByMaxAscending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
@@ -190,7 +184,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerByMinAscending : IComparer<int[]>
+        private class ComparerByMinAscending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
@@ -198,7 +192,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerBySumDescending : IComparer<int[]>
+        private class ComparerBySumDescending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
@@ -206,7 +200,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerByMaxDescending : IComparer<int[]>
+        private class ComparerByMaxDescending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
@@ -214,7 +208,7 @@ namespace Homework.Tests
             }
         }
 
-        class ComparerByMinDescending : IComparer<int[]>
+        private class ComparerByMinDescending : IComparer<int[]>
         {
             public int Compare(int[] left, int[] right)
             {
