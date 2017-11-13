@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Homework
 {
@@ -11,8 +12,8 @@ namespace Homework
         /// sorts a jagged array of arrays of integers using compare function
         /// </summary>
         /// <param name="array">jagged array to sort</param>
-        /// <param name="compare">compare function</param>
-        public static void Sort(int[][] array, BubbleSorter.CompareArrays compare)
+        /// <param name="comparison">compare function</param>
+        public static void Sort(int[][] array, Comparison<int[]> comparison)
         {
             bool swapped = true;
             for (int i = 0; i < array.Length - 1 && swapped == true; i++)
@@ -20,7 +21,7 @@ namespace Homework
                 swapped = false;
                 for (int j = 0; j < array.Length - 1 - i; j++)
                 {
-                    if (compare(array[j], array[j + 1]) > 0)
+                    if (comparison(array[j], array[j + 1]) > 0)
                     {
                         BubbleSorter.SwapArrays(ref array[j], ref array[j + 1]);
                         swapped = true;
